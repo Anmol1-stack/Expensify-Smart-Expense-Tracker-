@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expensify - Create Account</title>
+    <link rel="stylesheet" href="create-account.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Expensify</h1>
+            </div>
+            <h2>Create Account</h2>
+            <p class="subtitle">Start tracking your expenses today</p>
+            
+            <form id="signup-form">
+                <div class="input-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                    <i class="toggle-password fas fa-eye-slash"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="btn-create">Create Account</button>
+                
+                <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+            </form>
+        </div>
+        
+        <div class="image-container">
+            <div class="overlay"></div>
+            <div class="welcome-text">
+                <h2>Welcome to Expensify</h2>
+                <p>Your smart expense tracker that helps you manage your finances efficiently</p>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Track your daily expenses</li>
+                    <li><i class="fas fa-check-circle"></i> Set savings goals</li>
+                    <li><i class="fas fa-check-circle"></i> Monitor your spending habits</li>
+                    <li><i class="fas fa-check-circle"></i> Get personalized insights</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="create-account.js"></script>
+</body>
+</html>

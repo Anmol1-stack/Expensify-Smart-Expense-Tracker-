@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expensify - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- ApexCharts for interactive charts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css">
+  <style>
+    /* Analytics page specific styles */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .top-overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    
+    .overview-card {
+      background-color: #1e2437;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+    
+    .overview-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    .overview-card .card-title {
+      font-size: 0.85rem;
+      color: #b0b7c9;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .overview-card .card-title i {
+      margin-right: 8px;
+      font-size: 1rem;
+    }
+    
+    .overview-card .card-value {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    
+    .overview-card .card-subtitle {
+      font-size: 0.8rem;
+      color: #8b93a7;
+    }
+    
+    .overview-card.positive .card-value {
+      color: #10b981;
+    }
+    
+    .overview-card.negative .card-value {
+      color: #ef4444;
+    }
+    
+    .middle-charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .chart-card {
+      background-color: #1e2437;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 350px;
+    }
+    
+    .chart-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .chart-card .card-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    
+    .chart-card .chart-container {
+      height: calc(100% - 40px);
+    }
+    
+    .smart-insight {
+      background-color: #2a3247;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #fde047;
+    }
+    
+    .smart-insight .insight-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .smart-insight .insight-title i {
+      margin-right: 10px;
+      color: #fde047;
+    }
+    
+    .smart-insight .insight-content {
+      font-size: 0.95rem;
+      color: #b0b7c9;
+      line-height: 1.5;
+    }
+    
+    .bottom-tiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    
+    .mini-card {
+      background-color: #1e2437;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mini-card .mini-title {
+      font-size: 0.9rem;
+      color: #b0b7c9;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .mini-card .mini-title i {
+      margin-right: 8px;
+      font-size: 0.9rem;
+    }
+    
+    .split-bars {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background-color: #2a3247;
+    }
+    
+    .split-bar-upi {
+      height: 100%;
+      background-color: #4169e1;
+    }
+    
+    .split-bar-cash {
+      height: 100%;
+      background-color: #fde047;
+    }
+    
+    .split-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #b0b7c9;
+    }
+    
+    .split-label {
+      display: flex;
+      align-items: center;
+    }
+    
+    .split-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    
+    .split-label.upi::before {
+      background-color: #4169e1;
+    }
+    
+    .split-label.cash::before {
+      background-color: #fde047;
+    }
+    
+    .hotspot-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .hotspot-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2a3247;
+      font-size: 0.85rem;
+      color: #b0b7c9;
+    }
+    
+    .hotspot-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .hotspot-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #fde047;
+      margin-right: 8px;
+    }
+    
+    .budget-alert {
+      display: flex;
+      align-items: center;
+      background-color: rgba(239, 68, 68, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    
+    .alert-icon {
+      color: #ef4444;
+      font-size: 1.2rem;
+      margin-right: 12px;
+    }
+    
+    .alert-text {
+      color: #ef4444;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Dashboard page specific styles */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navbar - Keep exactly the same as dashboard -->
+    <nav class="navbar">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="6" fill="#fde047" fillOpacity="0.1" />
+            <path d="M22 10H10C9.44772 10 9 10.4477 9 11V21C9 21.5523 9.44772 22 10 22H22C22.5523 22 23 21.5523 23 21V11C23 10.4477 22.5523 10 22 10Z" stroke="#fde047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M9 15H23" stroke="#fde047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span>Expensify</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <!-- Removed search and notification icons -->
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <!-- Sidebar - Keep exactly the same as dashboard -->
+      <aside class="sidebar">
+        <div class="sidebar-icons">
+          <a href="dashboard.html" class="sidebar-icon">
+            <i class="fas fa-home"></i>
+          </a>
+          <div class="sidebar-icon" id="edit-expense-btn" onclick="showExpenseEntry()">
+            <i class="fa-regular fa-note-sticky"></i>
+          </div>
+          <!-- Move profile icon here -->
+          <div class="sidebar-profile">
+            <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="profile-icon">
+          </div>
+          <div class="sidebar-icon">
+            <i class="fas fa-cog"></i>
+          </div>
+        </div>
+        <div class="sidebar-bottom">
+          <div class="sidebar-icon logout-icon">
+            <i class="fas fa-sign-out-alt"></i>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Analytics Content -->
+      <div class="dashboard">
+        <div class="dashboard-header">
+          <div class="dashboard-title">
+            <h1>Dashboard</h1>
+            <p>Detailed insights into your spending patterns and financial health</p>
+          </div>
+          <div class="date-selector">
+            <i class="fas fa-calendar"></i>
+            <span>May 01 - May 15</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Top Overview Cards -->
+          <div class="top-overview">
+            <!-- Total Received Card -->
+            <div class="overview-card positive">
+              <div class="card-title">
+                <i class="fas fa-receipt"></i>
+                Total Received
+              </div>
+              <div class="card-value">₹12,500</div>
+              <div class="card-subtitle">Mostly UPI</div>
+            </div>
+
+            <!-- Total Expenses Card -->
+            <div class="overview-card">
+              <div class="card-title">
+                <i class="fas fa-coins"></i>
+                Total Expenses This Month
+              </div>
+              <div class="card-value">₹8,740</div>
+              <div class="card-subtitle">Within budget</div>
+            </div>
+
+            <!-- Remaining Balance Card -->
+            <div class="overview-card">
+              <div class="card-title">
+                <i class="fas fa-wallet"></i>
+                Remaining Balance
+              </div>
+              <div class="card-value">₹3,760</div>
+              <div class="card-subtitle">Based on last updated data</div>
+            </div>
+
+            <!-- Daily Average Spend Card -->
+            <div class="overview-card">
+              <div class="card-title">
+                <i class="fas fa-calendar-day"></i>
+                Daily Avg Spend
+              </div>
+              <div class="card-value">₹582</div>
+              <div class="card-subtitle">You spend approx ₹582/day</div>
+            </div>
+          </div>
+
+          <!-- Middle Charts -->
+          <div class="middle-charts">
+            <!-- Category Spending Chart -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div class="card-title">Spending by Category</div>
+                <div class="chart-dropdown">
+                  <span>Month</span>
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+              </div>
+              <div class="chart-container" id="category-chart"></div>
+            </div>
+
+            <!-- Spending Timeline Chart -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div class="card-title">Spending Timeline</div>
+                <div class="chart-dropdown">
+                  <span>May</span>
+                  <i class="fas fa-chevron-down"></i>
+                </div>
+              </div>
+              <div class="chart-container" id="timeline-chart"></div>
+            </div>
+          </div>
+
+          <!-- Smart Insight Box -->
+          <div class="smart-insight">
+            <div class="insight-title">
+              <i class="fas fa-brain"></i>
+              Smart Insight
+            </div>
+            <div class="insight-content">
+              <p>This month, your biggest expense is on <strong>Food</strong> (32% of total). You're spending around ₹350 more on food compared to last month.</p>
+              <p>Overall, you saved 15% more compared to last month! Keep it up!</p>
+            </div>
+          </div>
+
+          <!-- Bottom Tiles -->
+          <div class="bottom-tiles">
+            <!-- UPI vs Cash Split -->
+            <div class="mini-card">
+              <div class="mini-title">
+                <i class="fas fa-exchange-alt"></i>
+                UPI vs Cash Split
+              </div>
+              <div class="split-bars">
+                <div class="split-bar-upi" style="width: 60%;"></div>
+                <div class="split-bar-cash" style="width: 40%;"></div>
+              </div>
+              <div class="split-details">
+                <div class="split-label upi">60% UPI</div>
+                <div class="split-label cash">40% Cash</div>
+              </div>
+            </div>
+
+            <!-- Spending Hotspots -->
+            <div class="mini-card">
+              <div class="mini-title">
+                <i class="fas fa-map-marker-alt"></i>
+                Spending Hotspots
+              </div>
+              <ul class="hotspot-list">
+                <li class="hotspot-item">
+                  <div class="hotspot-dot"></div>
+                  <span>College area (42%)</span>
+                </li>
+                <li class="hotspot-item">
+                  <div class="hotspot-dot"></div>
+                  <span>City center (28%)</span>
+                </li>
+                <li class="hotspot-item">
+                  <div class="hotspot-dot"></div>
+                  <span>Home neighborhood (18%)</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Budget Alert Box -->
+            <div class="mini-card">
+              <div class="mini-title">
+                <i class="fas fa-bullhorn"></i>
+                Budget Alert
+              </div>
+              <div class="budget-alert">
+                <i class="fas fa-exclamation-circle alert-icon"></i>
+                <span class="alert-text">Only ₹300 left for the week!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Category chart (Donut chart)
+      const categoryOptions = {
+        series: [32, 24, 18, 26],
+        labels: ['Food', 'Travel', 'Recharge', 'Others'],
+        chart: {
+          type: 'donut',
+          height: '100%',
+          fontFamily: 'Inter, sans-serif',
+          background: 'transparent',
+          foreColor: '#b0b7c9'
+        },
+        colors: ['#fde047', '#4169e1', '#ef4444', '#10b981'],
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '65%',
+              labels: {
+                show: true,
+                name: {
+                  show: true,
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: '#ffffff'
+                },
+                value: {
+                  show: true,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  color: '#ffffff',
+                  formatter: function(val) {
+                    return val + '%';
+                  }
+                },
+                total: {
+                  show: true,
+                  label: 'Total',
+                  fontSize: '14px',
+                  color: '#b0b7c9',
+                  formatter: function() {
+                    return '100%';
+                  }
+                }
+              }
+            }
+          }
+        },
+        legend: {
+          position: 'bottom',
+          horizontalAlign: 'center',
+          fontSize: '12px',
+          markers: {
+            width: 10,
+            height: 10,
+            radius: 20
+          },
+          itemMargin: {
+            horizontal: 8
+          }
+        },
+        tooltip: {
+          theme: 'dark',
+          y: {
+            formatter: function(value) {
+              return value + '%';
+            }
+          }
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                height: 280
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }
+        ]
+      };
+
+      const categoryChart = new ApexCharts(document.querySelector("#category-chart"), categoryOptions);
+      categoryChart.render();
+
+      // Timeline chart (Bar chart)
+      const timelineOptions = {
+        series: [{
+          name: 'Expense',
+          data: [320, 410, 240, 180, 540, 680, 220, 330, 450, 280, 190, 370, 250, 320, 480]
+        }],
+        chart: {
+          type: 'bar',
+          height: '100%',
+          fontFamily: 'Inter, sans-serif',
+          background: 'transparent',
+          foreColor: '#b0b7c9',
+          toolbar: {
+            show: false
+          }
+        },
+        colors: ['#4169e1'],
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            columnWidth: '70%',
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'],
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          labels: {
+            style: {
+              fontSize: '10px'
+            }
+          }
+        },
+        yaxis: {
+          labels: {
+            formatter: function(val) {
+              return '₹' + val;
+            },
+            style: {
+              fontSize: '10px'
+            }
+          }
+        },
+        tooltip: {
+          theme: 'dark',
+          y: {
+            formatter: function(value) {
+              return '₹' + value;
+            }
+          },
+          x: {
+            formatter: function(value) {
+              return 'May ' + value;
+            }
+          }
+        },
+        grid: {
+          borderColor: '#2a3247',
+          strokeDashArray: 5,
+          position: 'back'
+        }
+      };
+
+      const timelineChart = new ApexCharts(document.querySelector("#timeline-chart"), timelineOptions);
+      timelineChart.render();
+    });
+  </script>
+  <!-- Expense Entry Modal -->
+  <div id="expense-entry-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#232946; z-index:1000; overflow-y:auto;">
+    <div style="display:flex; flex-direction:row; height:100vh; width:100vw;">
+      <!-- Left: Transaction List -->
+      <div style="flex:1; background:#1e2437; padding:40px 24px; display:flex; flex-direction:column; min-width:0;">
+        <h2 style="margin-bottom:24px;">Your Transactions</h2>
+        <ul id="expense-list" style="list-style:none; padding:0; margin:0; flex:1; overflow-y:auto; background:#232946; border-radius:8px;">
+          <!-- Expenses will be listed here -->
+        </ul>
+        <div id="no-expenses" style="color:#b0b7c9; text-align:center; margin-top:12px;">No expenses yet.</div>
+      </div>
+      <!-- Right: Add/Edit Expense -->
+      <div style="flex:1; background:#232946; padding:40px 24px; display:flex; flex-direction:column; justify-content:center; min-width:0;">
+        <h2 style="margin-bottom:16px;">Add Expense</h2>
+        <div style="margin-bottom:24px;">
+          <strong>Total Spent:</strong> ₹<span id="modal-total-spent">8740</span> &nbsp;|&nbsp;
+          <strong>Amount Left:</strong> ₹<span id="modal-amount-left">3760</span>
+        </div>
+        <form id="expense-form" onsubmit="addExpense(event)" style="flex-shrink:0;">
+          <div style="margin-bottom:12px;">
+            <label for="expense-amount">Today's Expense (₹):</label>
+            <input type="number" id="expense-amount" name="expense-amount" min="1" required style="width:100%;padding:6px 8px;margin-top:4px;border-radius:6px;border:1px solid #444;background:#1e2437;color:#fff;">
+          </div>
+          <div style="margin-bottom:16px;">
+            <label for="expense-note">What did you spend on?</label>
+            <input type="text" id="expense-note" name="expense-note" maxlength="100" required style="width:100%;padding:6px 8px;margin-top:4px;border-radius:6px;border:1px solid #444;background:#1e2437;color:#fff;">
+          </div>
+          <button type="submit" style="background:#fde047;color:#232946;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer;width:100%;">Add Expense</button>
+        </form>
+        <button onclick="hideExpenseEntry()" style="margin-top:32px;background:none;color:#fde047;border:none;cursor:pointer;display:block;width:100%;font-size:1rem;">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    let totalSpent = 8740;
+    let amountLeft = 3760;
+    let expenses = [];
+    function showExpenseEntry() {
+      document.getElementById('expense-entry-modal').style.display = 'block';
+      renderExpenses();
+    }
+    function hideExpenseEntry() {
+      document.getElementById('expense-entry-modal').style.display = 'none';
+    }
+    function renderExpenses() {
+      document.getElementById('modal-total-spent').textContent = totalSpent;
+      document.getElementById('modal-amount-left').textContent = amountLeft;
+      const list = document.getElementById('expense-list');
+      const noExp = document.getElementById('no-expenses');
+      list.innerHTML = '';
+      if (expenses.length === 0) {
+        noExp.style.display = 'block';
+      } else {
+        noExp.style.display = 'none';
+        expenses.slice().reverse().forEach(exp => {
+          const li = document.createElement('li');
+          li.style.padding = '14px 0';
+          li.style.borderBottom = '1px solid #2a3247';
+          li.innerHTML = `<strong>₹${exp.amount}</strong> - <span style='color:#fde047;'>${exp.note}</span> <span style='float:right;color:#b0b7c9;font-size:0.9em;'>${exp.date}</span>`;
+          list.appendChild(li);
+        });
+      }
+    }
+    function addExpense(e) {
+      e.preventDefault();
+      const amt = parseInt(document.getElementById('expense-amount').value, 10);
+      const note = document.getElementById('expense-note').value;
+      if (!isNaN(amt) && amt > 0) {
+        totalSpent += amt;
+        amountLeft -= amt;
+        expenses.push({
+          amount: amt,
+          note: note,
+          date: new Date().toLocaleDateString()
+        });
+        renderExpenses();
+        document.getElementById('expense-form').reset();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expensify - Student Expense Survey</title>
+    <link rel="stylesheet" href="survey.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>Expensify</span>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><i class="fas fa-home"></i></li>
+                    <li><i class="fas fa-credit-card"></i></li>
+                    <li><i class="fas fa-list"></i></li>
+                    <li><i class="fas fa-chart-pie"></i></li>
+                    <li><i class="fas fa-envelope"></i></li>
+                    <li><i class="fas fa-cog"></i></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <i class="fas fa-share-alt"></i>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header>
+                <div class="header-title">
+                    <h1>Student Expense Survey</h1>
+                    <p>Help us understand your spending patterns</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="/api/placeholder/40/40" alt="User Profile">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Survey Container -->
+            <div class="survey-container">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="survey-progress"></div>
+                </div>
+                
+                <form id="expense-survey">
+                    <!-- Survey sections will be dynamically loaded here -->
+                    <div class="survey-section" id="section-welcome" data-section="welcome">
+                        <h2>Welcome to your Expense Analysis</h2>
+                        <p>This survey will help us understand your spending patterns as a student. Let's start with some basic information.</p>
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-primary next-btn" data-next="basic-info">Get Started</button>
+                        </div>
+                    </div>
+
+                    <!-- Basic Information Section -->
+                    <div class="survey-section hidden" id="section-basic-info" data-section="basic-info">
+                        <h2>Basic Information</h2>
+                        
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="16" max="60" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="male" required>
+                                    <span>Male</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="female">
+                                    <span>Female</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="other">
+                                    <span>Other</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="gender" value="prefer-not-to-say">
+                                    <span>Prefer not to say</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="education-level">Education Level</label>
+                            <select id="education-level" name="education-level" required>
+                                <option value="">Select your education level</option>
+                                <option value="high-school">High School</option>
+                                <option value="undergraduate">Undergraduate</option>
+                                <option value="postgraduate">Postgraduate</option>
+                                <option value="doctoral">Doctoral</option>
+                            </select>
+                        </div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="welcome">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="living-situation">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Living Situation Section -->
+                    <div class="survey-section hidden" id="section-living-situation" data-section="living-situation">
+                        <h2>Living Situation</h2>
+                        
+                        <div class="form-group">
+                            <label>Where do you currently live?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="living-situation" value="home" required>
+                                    <span>Home (with family)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="living-situation" value="hostel">
+                                    <span>Hostel</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="living-situation" value="pg">
+                                    <span>Paying Guest (PG)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="living-situation" value="rented">
+                                    <span>Rented Apartment</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="basic-info">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="accommodation">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation Expenses Section (Dynamic based on living situation) -->
+                    <div class="survey-section hidden" id="section-accommodation" data-section="accommodation">
+                        <!-- This section will be dynamically populated based on living situation -->
+                        <h2>Accommodation Expenses</h2>
+                        <div id="accommodation-questions"></div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="living-situation">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="food-expenses">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Food Expenses Section -->
+                    <div class="survey-section hidden" id="section-food-expenses" data-section="food-expenses">
+                        <h2>Food Expenses</h2>
+                        <div id="food-questions"></div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="accommodation">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="transportation">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Transportation Section -->
+                    <div class="survey-section hidden" id="section-transportation" data-section="transportation">
+                        <h2>Transportation Expenses</h2>
+                        <div id="transportation-questions"></div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="food-expenses">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="personal-care">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Personal Care Section -->
+                    <div class="survey-section hidden" id="section-personal-care" data-section="personal-care">
+                        <h2>Personal Care Expenses</h2>
+                        <div id="personal-care-questions"></div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="transportation">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="entertainment">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Entertainment & Leisure Section -->
+                    <div class="survey-section hidden" id="section-entertainment" data-section="entertainment">
+                        <h2>Entertainment & Leisure</h2>
+                        
+                        <div class="form-group">
+                            <label for="entertainment-budget">Monthly entertainment budget (₹)</label>
+                            <input type="number" id="entertainment-budget" name="entertainment-budget" min="0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>How often do you go out with friends?</label>
+                            <select id="social-outings" name="social-outings">
+                                <option value="">Select frequency</option>
+                                <option value="daily">Almost daily</option>
+                                <option value="weekly">1-2 times a week</option>
+                                <option value="monthly">1-2 times a month</option>
+                                <option value="rarely">Rarely</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>What activities do you spend on? (Select all that apply)</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="entertainment-activities" value="movies">
+                                    <span>Movies/OTT subscriptions</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="entertainment-activities" value="dining">
+                                    <span>Dining out</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="entertainment-activities" value="shopping">
+                                    <span>Shopping</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="entertainment-activities" value="gaming">
+                                    <span>Gaming</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="entertainment-activities" value="travel">
+                                    <span>Weekend trips/Travel</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="personal-care">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="income-savings">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Income & Savings Section -->
+                    <div class="survey-section hidden" id="section-income-savings" data-section="income-savings">
+                        <h2>Income & Savings</h2>
+                        
+                        <div class="form-group">
+                            <label for="monthly-allowance">Monthly pocket money/allowance (₹)</label>
+                            <input type="number" id="monthly-allowance" name="monthly-allowance" min="0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Do you have any other source of income?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="other-income" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="other-income" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group hidden" id="other-income-source">
+                            <label>What are your other sources of income? (Select all that apply)</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="income-sources" value="part-time">
+                                    <span>Part-time job</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="income-sources" value="freelance">
+                                    <span>Freelancing</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="income-sources" value="tutoring">
+                                    <span>Tutoring</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="income-sources" value="scholarship">
+                                    <span>Scholarship</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="income-sources" value="other">
+                                    <span>Other</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="saving-goal">Do you have a monthly saving goal?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="saving-goal" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="saving-goal" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group hidden" id="saving-amount">
+                            <label for="monthly-saving">How much do you aim to save monthly? (₹)</label>
+                            <input type="number" id="monthly-saving" name="monthly-saving" min="0">
+                        </div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="entertainment">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="additional">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Questions Section -->
+                    <div class="survey-section hidden" id="section-additional" data-section="additional">
+                        <h2>Additional Questions</h2>
+                        
+                        <div class="form-group">
+                            <label>How often do you track your expenses?</label>
+                            <select id="expense-tracking" name="expense-tracking">
+                                <option value="">Select frequency</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="never">Never</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>What's your biggest expense challenge as a student?</label>
+                            <textarea id="expense-challenge" name="expense-challenge" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Would you like to receive personalized expense management tips?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="expense-tips" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="expense-tips" value="no">
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary prev-btn" data-prev="income-savings">Back</button>
+                            <button type="button" class="btn btn-primary next-btn" data-next="completion">Submit</button>
+                        </div>
+                    </div>
+
+                    <!-- Survey Completion Section -->
+                    <div class="survey-section hidden" id="section-completion" data-section="completion">
+                        <div class="completion-container">
+                            <div class="completion-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h2>Thank You!</h2>
+                            <p>Your survey responses have been submitted successfully.</p>
+                            <p>We'll analyze your spending patterns and provide personalized insights to help you manage your finances better.</p>
+                            
+                            <div class="btn-container">
+                                <button type="button" class="btn btn-primary" id="view-dashboard">View Dashboard</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="survey.js"></script>
+</body>
+</html>
